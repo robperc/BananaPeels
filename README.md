@@ -43,9 +43,9 @@ a specified repo.
 optional arguments:
   -h, --help            show this help message and exit
   --repo PATH           Path to munki repo to test.
-  --vmx PATH            Path to vmx file for VM to use for testing.
-  --user NAME           Shortname of user configured admin account on VM.
+  --vmx PATH            Path to vmx file for VM.
+  --user NAME           Shortname for admin account on VM.
   --password PASSWORD   Password for admin account on VM
   --only SomePkg-x.x.x [SomePkg-x.x.x ...]
-                        Optionally specify name-vers of packages to test.
+                        Optionally specify name-version of packages to test.
 ```
