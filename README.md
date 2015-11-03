@@ -31,7 +31,7 @@ BananaPeels is a framework for testing the deployement of packages via Munki wra
 
 ##Usage:
 ```
-python /Users/robert/Desktop/GUMR_tests/BananaPeels.py -h
+python BananaPeels.py -h
 usage: BananaPeels.py [-h] --repo PATH --vmx PATH --user NAME --password
                       PASSWORD [--only SomePkg-x.x.x [SomePkg-x.x.x ...]]
 
