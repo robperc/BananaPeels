@@ -10,9 +10,12 @@ import time
 
 TEST_MANIFEST   = "test_munki_client"
 VMRUN_CMD       = "/Applications/VMware Fusion.app/Contents/Library/vmrun"
-DL_CMD          = "sudo /usr/local/munki/managedsoftwareupdate"
+DL_CMD          = "sudo /usr/local/munki/managedsoftwareupdate -v"
 INSTALL_CMD     = "sudo /usr/local/munki/managedsoftwareupdate --installonly"
 GUEST_ERROR_LOG = "/Library/Managed Installs/Logs/errors.log"
+CHECK_FILE      = "/tmp/installcheck_bananas.log"
+CHECK_CMD       = DL_CMD + " > " + CHECK_FILE
+GREP_CMD        = "grep -c 'The following items will be installed or upgraded' " + CHECK_FILE
 
 # Defines object to handle tests for each SUT
 class TestRunner:
@@ -67,14 +70,14 @@ class TestRunner:
         for name, sut in self.repo_info.iteritems():
             print "Running test for %s, version %s" % (sut.name, str(sut.version))
             sut_name = sut.name + '-' + str(sut.version)
-            #self.startBaseVM()
+            self.startBaseVM()
             self.modifyManifest(sut_name)
             test, details = IntegrationTest(self.admin, self.admin_pw, self.vmx_path).run()
             self.results['run'] += 1
             if not test:
                 self.results['failed'] += 1
                 self.results['details'][sut_name] = details
-        #self.modifyManifest()
+        self.modifyManifest()
         self.results['runtime'] = (time.time() - start)
 
     # Show run details for SUTs that fail tests
@@ -127,13 +130,23 @@ class IntegrationTest:
     def installSUT(self):
         subprocess.check_call([VMRUN_CMD, "-T", "fusion", "-gu", self.admin, "-gp", self.admin_pw, "runProgramInGuest", self.vmx_path, "/bin/bash", "-c", INSTALL_CMD])
 
+    # Checks to ensure SUT and it's dependencies all installcheck properly.
+    # Returns True if installchecks find SUT and dependencies, False otherwise.
+    def installCheckSUT(self):
+        subprocess.call([VMRUN_CMD, "-T", "fusion", "-gu", self.admin, "-gp", self.admin_pw, "runProgramInGuest", self.vmx_path, "/bin/bash", "-c", CHECK_CMD])
+        subprocess.call([VMRUN_CMD, "-T", "fusion", "-gu", self.admin, "-gp", self.admin_pw, "copyFileFromGuestToHost", self.vmx_path, CHECK_FILE, "/tmp/installcheck_peels.log"])
+        p = subprocess.Popen(["grep", "-c", "The following items will be installed or upgraded", "/tmp/installcheck_peels.log"], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        out, err = p.communicate()
+        return int(out) == 0
+
     # Copies Munki error log from guest VM to host and returns most recently appended line.
     def getError(self):
-        subprocess.call([VMRUN_CMD, "-T", "fusion", "-gu", self.admin, "-gp", self.admin_pw, "copyFileFromGuestToHost", self.vmx_path, GUEST_ERROR_LOG, "/tmp/peels.log"])
-        p = subprocess.Popen(["tail", "-n1", "/tmp/peels.log"], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        subprocess.call([VMRUN_CMD, "-T", "fusion", "-gu", self.admin, "-gp", self.admin_pw, "copyFileFromGuestToHost", self.vmx_path, GUEST_ERROR_LOG, "/tmp/errors_peels.log"])
+        p = subprocess.Popen(["tail", "-n1", "/tmp/errors_peels.log"], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         out, err = p.communicate()
         out = str(out.split('ERROR: ')[1])
         return out
+
 
     # Runs test methods in proper order. If encounters exception in any of the test methods
     # then returns test failure and the log message corresponding to the error that caused
@@ -142,11 +155,13 @@ class IntegrationTest:
         try:
             self.downloadSUT()
         except Exception as e:
-            return False, self.getErrorLog()
+            return False, self.getError()
         try:
             self.installSUT()
         except Exception as e:
-            return False, self.getErrorLog()
+            return False, self.getError()
+        if not self.installCheckSUT():
+            return False, "Confirm installcheck is configured properly."
         return True, None
 
 # Defines SUT object for testing
