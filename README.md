@@ -6,7 +6,7 @@ Note: This is very early on in dev. Pull requests are welcome.
 - VMWare Fusion
 - Pre-made and configured OS X VM
 - Configured Munki repo to serve packages
-- test_munki_client manifest in manifests directory
+- test_munki_client manifest in manifests directory of repository
 
 ##VM Configuration:
 - Create an OS X VM with a test admin account (don't use a sensitive account name or password for this VM- the password must be specified in plaintext to communicate with vmrun)
@@ -15,7 +15,7 @@ Note: This is very early on in dev. Pull requests are welcome.
 sudo /bin/launchctl unload -w /Library/LaunchDaemons/com.googlecode.munki.managedsoftwareupdate-check.plist
 ```
 - Install Munki and VMWare Tools to VM
-- Configure VM client Munki to fetch from your Munki repo
+- Configure VM client Munki to fetch from your Munki repository
 - Configure VM client Munki to subscribe to test_munki_client manifest
 - Add your admin account to sudoers file in VM
 ```
