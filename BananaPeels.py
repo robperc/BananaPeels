@@ -8,10 +8,11 @@ import plistlib
 import subprocess
 import time
 
-TEST_MANIFEST = "test_munki_client"
-VMRUN_CMD     = "/Applications/VMware Fusion.app/Contents/Library/vmrun"
-DL_CMD        = "sudo /usr/local/munki/managedsoftwareupdate"
-INSTALL_CMD   = "sudo /usr/local/munki/managedsoftwareupdate --installonly"
+TEST_MANIFEST   = "test_munki_client"
+VMRUN_CMD       = "/Applications/VMware Fusion.app/Contents/Library/vmrun"
+DL_CMD          = "sudo /usr/local/munki/managedsoftwareupdate"
+INSTALL_CMD     = "sudo /usr/local/munki/managedsoftwareupdate --installonly"
+GUEST_ERROR_LOG = "/Library/Managed Installs/Logs/errors.log"
 
 # Defines object to handle tests for each SUT
 class TestRunner:
@@ -66,7 +67,7 @@ class TestRunner:
         for name, sut in self.repo_info.iteritems():
             print "Running test for %s, version %s" % (sut.name, str(sut.version))
             sut_name = sut.name + '-' + str(sut.version)
-            self.startBaseVM()
+            #self.startBaseVM()
             self.modifyManifest(sut_name)
             test, details = IntegrationTest(self.admin, self.admin_pw, self.vmx_path).run()
             self.results['run'] += 1
@@ -118,21 +119,34 @@ class IntegrationTest:
         self.admin_pw = admin_pw 
         self.vmx_path = vmx_path
 
+    # Prompts Munki to check for updates on guest VM. Throws exception if exit code is not 0
     def downloadSUT(self):
         subprocess.check_call([VMRUN_CMD, "-T", "fusion", "-gu", self.admin, "-gp", self.admin_pw, "runProgramInGuest", self.vmx_path, "/bin/bash", "-c", DL_CMD])
-        
+    
+    # Prompts Munki to install updates on guest VM. Throws exception if exit code is not 0.
     def installSUT(self):
         subprocess.check_call([VMRUN_CMD, "-T", "fusion", "-gu", self.admin, "-gp", self.admin_pw, "runProgramInGuest", self.vmx_path, "/bin/bash", "-c", INSTALL_CMD])
 
+    # Copies Munki error log from guest VM to host and returns most recently appended line.
+    def getError(self):
+        subprocess.call([VMRUN_CMD, "-T", "fusion", "-gu", self.admin, "-gp", self.admin_pw, "copyFileFromGuestToHost", self.vmx_path, GUEST_ERROR_LOG, "/tmp/peels.log"])
+        p = subprocess.Popen(["tail", "-n1", "/tmp/peels.log"], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        out, err = p.communicate()
+        out = str(out.split('ERROR: ')[1])
+        return out
+
+    # Runs test methods in proper order. If encounters exception in any of the test methods
+    # then returns test failure and the log message corresponding to the error that caused
+    # the exception.
     def run(self):
         try:
             self.downloadSUT()
         except Exception as e:
-            return False, str(e)
+            return False, self.getErrorLog()
         try:
             self.installSUT()
         except Exception as e:
-            return False, str(e)
+            return False, self.getErrorLog()
         return True, None
 
 # Defines SUT object for testing
@@ -145,6 +159,7 @@ class SUT:
         self.version    = self.pkginfo.get("version")
         self.update_for = self.pkginfo.get("update_for")
 
+    # Read specified pkginfo or plist into a python-parseable dictionary
     def getpkginfo(self, path):
         return plistlib.readPlist(path)
 
