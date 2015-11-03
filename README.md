@@ -9,7 +9,7 @@ Note: This is very early on in dev. Pull requests are welcome.
 
 ##VM Configuration:
 - Create an OS X VM with a test admin account (don't use a sensitive account name or password for this VM- the password must be specified in plaintext to communicate with vmrun)
-- Stop Munki from attempting hourly runs (we'll be running Munki manually)
+- Stop Munki from attempting hourly runs in VM (we'll be running Munki manually and hourly runs can cause error when running tests)
 ```
 sudo /bin/launchctl unload -w /Library/LaunchDaemons/com.googlecode.munki.managedsoftwareupdate-check.plist
 ```
