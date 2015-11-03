@@ -29,7 +29,7 @@ YOUR_ADMIN_USER ALL=(ALL) NOPASSWD: ALL
 
 ##Details:
 BananaPeels is a framework for testing the deployement of packages via Munki wrapped up in a CLI for ease-of-use. BananaPeels works by using a baseline OS X VM snapshot as a fixture to download and install specified packages to via Munki. Any failures or errors in the download or install process are logged and returned to the user at the conclusion of the sequence of tests.
-Default behavior is to search the specified repo for all valid .pkginfo and .plist files and attepmt to deploy their configured package to the VM test environment. If name-version pairs are provided via the optional "--only" argument then only packages found in the repo corresponding to those name-version pairs will be deployed. 
+Default behavior is to search the specified repo for all valid .pkginfo and .plist files and attempt to deploy the configured package for each to the VM test environment. If name-version pairs are provided via the optional "--only" argument then only packages found in the repo corresponding to those name-version pairs will be deployed. 
 
 ##Usage:
 ```
