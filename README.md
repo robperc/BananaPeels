@@ -26,6 +26,7 @@ YOUR_ADMIN_USER ALL=(ALL) NOPASSWD: ALL
 ...
 ```
 - Take snapshot of VM titled "Base"
+- Move "test_munki_client" template manfifest to manifests
 
 ##Details:
 BananaPeels is a framework for testing the deployement of packages via Munki wrapped up in a CLI for ease-of-use. BananaPeels works by using a baseline OS X VM snapshot as a fixture to download and install specified packages to via Munki. Any failures or errors in the download or install process are logged and returned to the user at the conclusion of the sequence of tests.
