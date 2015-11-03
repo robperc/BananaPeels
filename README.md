@@ -1,6 +1,6 @@
 # BananaPeels
 A framework for testing the deployement of packages via Munki wrapped in a CLI tool. Requires VMWare Fusion.
-There's a lot I have yet to improve here so pull requests are welcome.
+Note: This is very early on in dev. Pull requests are welcome.
 
 ##Requires:
 - VMWare Fusion
