@@ -159,13 +159,13 @@ def main():
         help='Path to vmx file for VM to use for testing.',
     )
     parser.add_argument('--user', metavar='NAME', type=str, nargs=1, required=True,
-        help='Shortname of user configured admin account on VM.',
+        help='Shortname for admin account on VM.',
     )
     parser.add_argument('--password', metavar='PASSWORD', type=str, nargs=1, required=True,
-        help='Password for admin account on VM',
+        help='Password for admin account on VM.',
     )
     parser.add_argument('--only', metavar='SomePkg-x.x.x', type=str, nargs='+', 
-        help='Optionally specify name-vers of pkgs to test.',
+        help='Optionally specify name-version of pkgs to test.',
     )
     args = parser.parse_args()
     pkg_filter = args.only if args.only else None
