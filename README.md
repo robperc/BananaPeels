@@ -41,5 +41,5 @@ optional arguments:
   --user NAME           Shortname of user configured admin account on VM.
   --password PASSWORD   Password for admin account on VM
   --only SomePkg-x.x.x [SomePkg-x.x.x ...]
-                        Optionally specify name-vers of pkgs to test.
+                        Optionally specify name-vers of packages to test.
 ```
