@@ -6,6 +6,7 @@ Note: This is very early on in dev. Pull requests are welcome.
 - VMWare Fusion
 - Pre-made and configured OS X VM
 - Configured Munki repo to serve packages
+- test_munki_client manifest in manifests directory
 
 ##VM Configuration:
 - Create an OS X VM with a test admin account (don't use a sensitive account name or password for this VM- the password must be specified in plaintext to communicate with vmrun)
@@ -26,7 +27,6 @@ YOUR_ADMIN_USER ALL=(ALL) NOPASSWD: ALL
 ...
 ```
 - Take snapshot of VM titled "Base"
-- Move "test_munki_client" template manfifest to manifests
 
 ##Details:
 BananaPeels is a framework for testing the deployement of packages via Munki wrapped up in a CLI for ease-of-use. BananaPeels works by using a baseline OS X VM snapshot as a fixture to download and install specified packages to via Munki. Any failures or errors in the download or install process are logged and returned to the user at the conclusion of the sequence of tests.
