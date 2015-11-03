@@ -50,3 +50,17 @@ optional arguments:
   --only SomePkg-x.x.x [SomePkg-x.x.x ...]
                         Optionally specify name-version of packages to test.
 ```
+##Known Bugs
+- Occasionally Munki will fail with exit code 150 when run through vmrun. Haven't been able to pin down why, but exit code 150 appears to indicate that the repo is unavailable (which isn't the case upon manual inspection). When this occurs I have deleted and re-made the "Base" snapshot and things work again. Exit codes from munkicommon.py can be found below:
+```
+# Preflight exit codes.
+EXIT_STATUS_PREFLIGHT_FAILURE = 1  # Python crash yields 1.
+# Client config exit codes.
+EXIT_STATUS_OBJC_MISSING = 100
+EXIT_STATUS_MUNKI_DIRS_FAILURE = 101
+# Server connection exit codes.
+EXIT_STATUS_SERVER_UNAVAILABLE = 150
+# User related exit codes.
+EXIT_STATUS_INVALID_PARAMETERS = 200
+EXIT_STATUS_ROOT_REQUIRED = 201
+```
