@@ -9,7 +9,7 @@ A framework for testing the deployement of packages via Munki
 ##VM Configuration:
 - Create an OS X VM with a test admin account (don't use a sensitive account name or password for this VM- the password must be specified in plaintext to communicate with vmrun)
 - Stop Munki from attempting hourly runs (we'll be running Munki manually)
-```sudo /bin/launchctl unload -w /Library/LaunchDaemons/com.googlecode.munki.managedsoftwareupdate-check.plist```
+-```sudo /bin/launchctl unload -w /Library/LaunchDaemons/com.googlecode.munki.managedsoftwareupdate-check.plist```
 - Install Munki and VMWare Tools to VM
 - Configure VM client Munki to fetch from your Munki repo
 - Configure VM client Munki to subscribe to test_munki_client manifest
@@ -17,8 +17,10 @@ A framework for testing the deployement of packages via Munki
 ```
 sudo visudo
 # User privilege specification
+...
 root            ALL=(ALL) ALL
 YOUR_ADMIN_USER ALL=(ALL) NOPASSWD: ALL
+...
 ```
 - Take snapshot of VM titled "Base"
 
