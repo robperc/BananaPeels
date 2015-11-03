@@ -16,7 +16,7 @@ sudo /bin/launchctl unload -w /Library/LaunchDaemons/com.googlecode.munki.manage
 - Install Munki and VMWare Tools to VM
 - Configure VM client Munki to fetch from your Munki repo
 - Configure VM client Munki to subscribe to test_munki_client manifest
-- Add your admin account to sudoers file
+- Add your admin account to sudoers file in VM
 ```
 sudo visudo
 # User privilege specification
