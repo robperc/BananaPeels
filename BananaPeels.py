@@ -72,6 +72,7 @@ class TestRunner(object):
             sut_name = sut.name + '-' + str(sut.version)
             self.startBaseVM()
             self.modifyManifest(sut_name)
+            time.sleep(2) # wait for VM to wake up.
             test, details = IntegrationTest(self.admin, self.admin_pw, self.vmx_path).run()
             self.results['run'] += 1
             if not test:
