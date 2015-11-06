@@ -18,7 +18,7 @@ CHECK_CMD       = DL_CMD + " > " + CHECK_FILE
 GREP_CMD        = "grep -c 'The following items will be installed or upgraded' " + CHECK_FILE
 
 # Defines object to handle tests for each SUT
-class TestRunner:
+class TestRunner(object):
 
     def __init__(self, repo_path, vmx_path, admin, admin_pw, pkg_filter=None):
         self.repo_path = repo_path
@@ -115,7 +115,7 @@ class TestRunner:
         subprocess.call([VMRUN_CMD, "stop", self.vmx_path])
 
 # Defines testing methods for running against SUT
-class IntegrationTest:
+class IntegrationTest(object):
 
     def __init__(self, admin, admin_pw, vmx_path):
         self.admin    = admin
@@ -165,7 +165,7 @@ class IntegrationTest:
         return True, None
 
 # Defines SUT object for testing
-class SUT:
+class SUT(object):
 
     def __init__(self, pkginfo):
         self.path       = pkginfo
