@@ -241,7 +241,7 @@ def main():
         help='Password for admin account on VM.',
     )
     parser.add_argument('--only', metavar='SomePkg-x.x.x', type=str, nargs='+', 
-        help='Optionally specify name-version of pkgs to test. If no version specified defaults to latest.',
+        help='Optionally specify name-version of pkgs to test. If no version specified defaults to latest. Packages specified by only will be tested individually.',
     )
     args = parser.parse_args()
     info = PkgsInfoDict(args.repo[0])
