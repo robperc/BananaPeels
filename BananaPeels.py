@@ -186,7 +186,6 @@ class IntegrationTest(object):
         out = str(out.split('ERROR: ')[1])
         return out
 
-
     # Runs test methods in proper order. If encounters exception in any of the test methods
     # then returns test failure and the log message corresponding to the error that caused
     # the exception.
