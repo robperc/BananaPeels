@@ -44,11 +44,13 @@ a specified repo.
 optional arguments:
   -h, --help            show this help message and exit
   --repo PATH           Path to munki repo to test.
-  --vmx PATH            Path to vmx file for VM.
+  --vmx PATH            Path to vmx file for VM to use for testing.
   --user NAME           Shortname for admin account on VM.
-  --password PASSWORD   Password for admin account on VM
+  --password PASSWORD   Password for admin account on VM.
   --only SomePkg-x.x.x [SomePkg-x.x.x ...]
-                        Optionally specify name-version of packages to test.
+                        Optionally specify name-version of pkgs to test. If no
+                        version specified defaults to latest. Packages
+                        specified by only will be tested individually.
 ```
 ##Known Bugs
 - Occasionally Munki will fail with exit code 150 when run through vmrun. Haven't been able to pin down why, but exit code 150 appears to indicate that the repo is unavailable (which isn't the case upon manual inspection). When this occurs I have deleted and re-made the "Base" snapshot and things work again. Exit codes from munkicommon.py can be found below:
