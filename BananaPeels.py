@@ -26,8 +26,8 @@ class PkgsInfoDict(object):
 
     def __init__(self, repo_path):
         self.repo_path = repo_path
-        self.repo_info = OrderedDict()
-        self.suts = list()
+        self.repo_info = self.generate()
+        self.filtered = list()
 
     # Returns info for all pkginfos in repo_path.
     def generate(self):
@@ -39,41 +39,56 @@ class PkgsInfoDict(object):
                 if filename.endswith(('.pkginfo', '.plist')):
                     pkginfos.append(os.path.join(root, filename))
         for pkginfo in pkginfos:
-            sut = PkgInfo(pkginfo)
-            if sut.name is None or sut.version is None:
+            info = PkgInfo(pkginfo)
+            if info.name is None or info.version is None:
                 print "%s is missing it's name or version" % pkginfo
                 print "Skipping"
                 continue
-            if repo_dict.get(sut.name) is None:
-                repo_dict[sut.name] = OrderedDict()
-            if repo_dict[sut.name].get(sut.version) is None:
-                repo_dict[sut.name][sut.version] = sut
+            if repo_dict.get(info.name) is None:
+                repo_dict[info.name] = OrderedDict()
+            if repo_dict[info.name].get(info.version) is None:
+                repo_dict[info.name][info.version] = info
             else:
-                print "WARNING: there appears to be duplicate pkginfos for %s version %s." % (sut.name, sut.version)
-                print ' - ' + sut.path
-                print ' - ' + repo_dict[sut.name][sut.version].path
+                print "WARNING: there appears to be duplicate pkginfos for %s version %s." % (info.name, info.version)
+                print ' - ' + info.path
+                print ' - ' + repo_dict[info.name][info.version].path
                 print
-        self.repo_info = OrderedDict(sorted(repo_dict.items(),key=lambda t: t[0]))
+        return OrderedDict(sorted(repo_dict.items(),key=lambda t: t[0]))
 
-    # Returns pkginfo dict containing pkginfos specified by filter.
+    # Filters PkgInfoDict for infos matching specified filters.
     ### Need to improve
-    def filter(self, filters=None):
-        suts = list()
-        if filters is not None:
+    def filter(self, mode, filters=None):
+        infos = list()
+        if mode == 'all':
+            infos = self.getAllInfos()
+        elif mode == 'only' and filters is not None:
             for fil in filters:
-                name, version = fil.split('-')
+                if len(fil.split('-')) == 1:
+                    name = fil
+                    version = None
+                elif len(fil.split('-')) == 2:
+                    name, version = fil.split('-')
+                else:
+                    continue
                 if self.repo_info.get(name) is not None:
                     if self.repo_info[name].get(version) is None:
                         version = sorted(self.repo_info[name].keys(), key=LooseVersion)[-1]
-                    suts.append(self.repo_info[name][version])
+                    infos.append(self.repo_info[name][version])
         else:
             for name, versions in self.repo_info.iteritems():
                 latest = sorted(versions.keys(), key=LooseVersion)[-1]
-                suts.append(self.repo_info[name][latest])
-        self.suts = suts
+                infos.append(self.repo_info[name][latest])
+        self.infos = infos
 
-    def getSUTs(self):
-        return self.suts
+    def getAllInfos(self):
+        infos = list()
+        for name, versions in self.repo_info.iteritems():
+            for version in versions.keys():
+                infos.append(self.repo_info[name][version])
+        return infos
+
+    def getInfos(self):
+        return self.infos
 
     def __str__(self):
         ret_str = """"""
@@ -228,15 +243,14 @@ def main():
     parser.add_argument('--only', metavar='SomePkg-x.x.x', type=str, nargs='+', 
         help='Optionally specify name-version of pkgs to test. If no version specified defaults to latest.',
     )
-    parser.add_argument('--all', action='store_true',
-        help='Optionally specify name-version of pkgs to test. If no version specified defaults to latest.',
-    )
     args = parser.parse_args()
-    pkg_filter = args.only if args.only else None
     info = PkgsInfoDict(args.repo[0])
-    info.generate()
-    info.filter(filters=pkg_filter)
-    testrunner = TestRunner(args.repo[0], info.getSUTs(), args.vmx[0], args.user[0], args.password[0])
+    if args.only:
+        info.filter('only', args.only)
+    else:
+        info.filter('all')
+    SUTs = info.getInfos()
+    testrunner = TestRunner(args.repo[0], SUTs, args.vmx[0], args.user[0], args.password[0])
     testrunner.runTests()
     testrunner.showDetails()
 
