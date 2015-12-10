@@ -21,7 +21,7 @@ CHECK_FILE      = "/tmp/installcheck_bananas.log"
 CHECK_CMD       = DL_CMD + " > " + CHECK_FILE
 GREP_CMD        = "grep -c 'The following items will be installed or upgraded' " + CHECK_FILE
 
-# 
+# Defines class for gathering PkgInfos
 class PkgsInfoDict(object):
 
     def __init__(self, repo_path):
@@ -39,7 +39,7 @@ class PkgsInfoDict(object):
                 if filename.endswith(('.pkginfo', '.plist')):
                     pkginfos.append(os.path.join(root, filename))
         for pkginfo in pkginfos:
-            sut = SUT(pkginfo)
+            sut = PkgInfo(pkginfo)
             if sut.name is None or sut.version is None:
                 print "%s is missing it's name or version" % pkginfo
                 print "Skipping"
@@ -53,10 +53,6 @@ class PkgsInfoDict(object):
                 print "The culprit pkginfos can be found here:"
                 print sut.pkginfo
                 print repo_dict[sut.name][sut.version].pkginfo
-        # Print when debugging
-        # for key, value in repo_dict.iteritems():
-        #     print key
-        #     print value.pkginfo
         self.repo_info = OrderedDict(sorted(repo_dict.items(),key=lambda t: t[0]))
 
     # Returns pkginfo dict containing pkginfos specified by filter.
@@ -202,8 +198,8 @@ class IntegrationTest(object):
             return False, "Confirm installcheck is configured properly."
         return True, None
 
-# Defines SUT object for testing
-class SUT(object):
+# Defines PkgInfo object
+class PkgInfo(object):
 
     def __init__(self, pkginfo):
         self.path       = pkginfo
