@@ -49,10 +49,10 @@ class PkgsInfoDict(object):
             if repo_dict[sut.name].get(sut.version) is None:
                 repo_dict[sut.name][sut.version] = sut
             else:
-                print "There appears to be duplicate pkginfos for the specified name and version."
-                print "The culprit pkginfos can be found here:"
-                print sut.pkginfo
-                print repo_dict[sut.name][sut.version].pkginfo
+                print "WARNING: there appears to be duplicate pkginfos for %s version %s." % (sut.name, sut.version)
+                print ' - ' + sut.path
+                print ' - ' + repo_dict[sut.name][sut.version].path
+                print
         self.repo_info = OrderedDict(sorted(repo_dict.items(),key=lambda t: t[0]))
 
     # Returns pkginfo dict containing pkginfos specified by filter.
@@ -70,9 +70,6 @@ class PkgsInfoDict(object):
             for name, versions in self.repo_info.iteritems():
                 latest = sorted(versions.keys(), key=LooseVersion)[-1]
                 suts.append(self.repo_info[name][latest])
-        for sut in suts:
-            print sut.name
-            print sut.version
         self.suts = suts
 
     def getSUTs(self):
