@@ -228,6 +228,9 @@ def main():
     parser.add_argument('--only', metavar='SomePkg-x.x.x', type=str, nargs='+', 
         help='Optionally specify name-version of pkgs to test. If no version specified defaults to latest.',
     )
+    parser.add_argument('--all', action='store_true',
+        help='Optionally specify name-version of pkgs to test. If no version specified defaults to latest.',
+    )
     args = parser.parse_args()
     pkg_filter = args.only if args.only else None
     info = PkgsInfoDict(args.repo[0])
