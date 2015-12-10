@@ -7,6 +7,10 @@ import os
 import plistlib
 import subprocess
 import time
+import random
+
+from collections import OrderedDict
+from distutils.version import LooseVersion
 
 TEST_MANIFEST   = "test_munki_client"
 VMRUN_CMD       = "/Applications/VMware Fusion.app/Contents/Library/vmrun"
@@ -17,22 +21,16 @@ CHECK_FILE      = "/tmp/installcheck_bananas.log"
 CHECK_CMD       = DL_CMD + " > " + CHECK_FILE
 GREP_CMD        = "grep -c 'The following items will be installed or upgraded' " + CHECK_FILE
 
-# Defines object to handle tests for each SUT
-class TestRunner(object):
+# 
+class PkgsInfoDict(object):
 
-    def __init__(self, repo_path, vmx_path, admin, admin_pw, pkg_filter=None):
+    def __init__(self, repo_path):
         self.repo_path = repo_path
-        self.repo_info = dict()
-        self.vmx_path  = vmx_path
-        self.admin     = admin
-        self.admin_pw  = admin_pw
-        self.results   = dict(runtime=0.0, run=0, failed=0, details=dict())
-        self.auditRepo(pkg_filter)
+        self.repo_info = OrderedDict()
+        self.suts = list()
 
-    # Returns info for all pkginfos in specified repo.
-    # If filter of pkginfo(s) is specified returns only
-    # info for those specified in filter.
-    def auditRepo(self, pkg_filter):
+    # Returns info for all pkginfos in repo_path.
+    def generate(self):
         repo_dict = dict()
         info_dir  = os.path.join(self.repo_path, "pkgsinfo")
         pkginfos  = []
@@ -46,28 +44,68 @@ class TestRunner(object):
                 print "%s is missing it's name or version" % pkginfo
                 print "Skipping"
                 continue
-            name_vers = sut.name + '-' + str(sut.version)
-            # If specific pkginfos requested for test ignore all others
-            if pkg_filter is not None and name_vers not in pkg_filter:
-                continue
-            if repo_dict.get(name_vers) is None:
-                repo_dict[name_vers] = sut
+            if repo_dict.get(sut.name) is None:
+                repo_dict[sut.name] = OrderedDict()
+            if repo_dict[sut.name].get(sut.version) is None:
+                repo_dict[sut.name][sut.version] = sut
             else:
                 print "There appears to be duplicate pkginfos for the specified name and version."
                 print "The culprit pkginfos can be found here:"
                 print sut.pkginfo
-                print repo_dict[name_vers].pkginfo
+                print repo_dict[sut.name][sut.version].pkginfo
         # Print when debugging
         # for key, value in repo_dict.iteritems():
         #     print key
         #     print value.pkginfo
-        self.repo_info = repo_dict
+        self.repo_info = OrderedDict(sorted(repo_dict.items(),key=lambda t: t[0]))
+
+    # Returns pkginfo dict containing pkginfos specified by filter.
+    ### Need to improve
+    def filter(self, filters=None):
+        suts = list()
+        if filters is not None:
+            for fil in filters:
+                name, version = fil.split('-')
+                if self.repo_info.get(name) is not None:
+                    if self.repo_info[name].get(version) is None:
+                        version = sorted(self.repo_info[name].keys(), key=LooseVersion)[-1]
+                    suts.append(self.repo_info[name][version])
+        else:
+            for name, versions in self.repo_info.iteritems():
+                latest = sorted(versions.keys(), key=LooseVersion)[-1]
+                suts.append(self.repo_info[name][latest])
+        for sut in suts:
+            print sut.name
+            print sut.version
+        self.suts = suts
+
+    def getSUTs(self):
+        return self.suts
+
+    def __str__(self):
+        ret_str = """"""
+        for a, b in self.repo_info.iteritems():
+            ret_str += a + "\n"
+            for c in b.keys():
+                ret_str += ' - ' + c + '\n'
+        return ret_str
+
+# Handles the running of the tests for the specified pkginfos it is provided
+class TestRunner(object):
+
+    def __init__(self, repo_path, suts, vmx_path, admin, admin_pw):
+        self.repo_path = repo_path
+        self.suts      = suts
+        self.vmx_path  = vmx_path
+        self.admin     = admin
+        self.admin_pw  = admin_pw
+        self.results   = dict(runtime=0.0, run=0, failed=0, details=dict())
 
     # Run tests for each SUT. Appends True / False passed key
     # as well as run details to dict entry for specified SUT.
     def runTests(self):
         start = time.time()
-        for name, sut in self.repo_info.iteritems():
+        for sut in self.suts:
             print "Running test for %s, version %s" % (sut.name, str(sut.version))
             sut_name = sut.name + '-' + str(sut.version)
             self.startBaseVM()
@@ -196,11 +234,14 @@ def main():
         help='Password for admin account on VM.',
     )
     parser.add_argument('--only', metavar='SomePkg-x.x.x', type=str, nargs='+', 
-        help='Optionally specify name-version of pkgs to test.',
+        help='Optionally specify name-version of pkgs to test. If no version specified defaults to latest.',
     )
     args = parser.parse_args()
     pkg_filter = args.only if args.only else None
-    testrunner = TestRunner(args.repo[0], args.vmx[0], args.user[0], args.password[0], pkg_filter)
+    info = PkgsInfoDict(args.repo[0])
+    info.generate()
+    info.filter(filters=pkg_filter)
+    testrunner = TestRunner(args.repo[0], info.getSUTs(), args.vmx[0], args.user[0], args.password[0])
     testrunner.runTests()
     testrunner.showDetails()
 
