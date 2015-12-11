@@ -35,8 +35,9 @@ Default behavior is to search the specified repo for all valid .pkginfo and .pli
 ##Usage:
 ```
 python BananaPeels.py -h
-usage: BananaPeels.py [-h] --repo PATH --vmx PATH --user NAME --password
-                      PASSWORD [--only SomePkg-x.x.x [SomePkg-x.x.x ...]]
+usage: BananaPeels.py [-h] --repo PATH --vmx PATH --snapshot TITLE --user NAME 
+		      --password PASSWORD 
+		     [--only SomePkg-x.x.x [SomePkg-x.x.x ...]]
 
 Command line tool for testing the download and install of Munki packages from
 a specified repo.
@@ -45,6 +46,7 @@ optional arguments:
   -h, --help            show this help message and exit
   --repo PATH           Path to munki repo to test.
   --vmx PATH            Path to vmx file for VM to use for testing.
+  --snapshot TITLE      Title of VM snapshot to use for testing.
   --user NAME           Shortname for admin account on VM.
   --password PASSWORD   Password for admin account on VM.
   --only SomePkg-x.x.x [SomePkg-x.x.x ...]
