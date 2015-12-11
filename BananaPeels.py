@@ -225,7 +225,7 @@ class AppInstallTest(BaseTest):
         self.app_path = app_path
 
     def appDoesOpen(self):
-        exit_code = subprocess.call([VMRUN_CMD, "-T", "fusion", "-gu", self.admin, "-gp", self.admin_pw, "runProgramInGuest", self.vmx_path, "/bin/bash", "-c", "/usr/bin/open " + self.app_path])
+        exit_code = subprocess.call([VMRUN_CMD, "-T", "fusion", "-gu", self.admin, "-gp", self.admin_pw, "runProgramInGuest", self.vmx_path, "/bin/bash", "-c", "/usr/bin/open " + self.app_path.replace(" ", "\ ")])
         return int(exit_code) == 0
 
     # Runs test methods in proper order. If encounters exception in any of the test methods
