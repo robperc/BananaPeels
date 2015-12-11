@@ -101,10 +101,11 @@ class PkgsInfoDict(object):
 # Handles the running of the tests for the specified pkginfos it is provided
 class TestRunner(object):
 
-    def __init__(self, repo_path, suts, vmx_path, admin, admin_pw):
+    def __init__(self, repo_path, suts, vmx_path, snapshot, admin, admin_pw):
         self.repo_path = repo_path
         self.suts      = suts
         self.vmx_path  = vmx_path
+        self.snapshot  = snapshot
         self.admin     = admin
         self.admin_pw  = admin_pw
         self.results   = dict(runtime=0.0, run=0, failed=0, details=dict())
@@ -116,16 +117,16 @@ class TestRunner(object):
         for sut in self.suts:
             print "Running test for %s, version %s" % (sut.name, str(sut.version))
             sut_name = sut.name + '-' + str(sut.version)
-            self.startBaseVM()
+            self.startVM()
             self.modifyManifest(sut_name)
             time.sleep(2) # wait for VM to wake up.
             # Right now only looks at first installs item
             # Need to un-shittify this
             if sut.pkginfo.get('installs')[0].get('type') == 'application':
                 path = sut.pkginfo['installs'][0]['path']
-                test, details = AppInstallTest(self.admin, self.admin_pw, self.vmx_path, path).run()
+                test, details = AppInstallTest(self.admin, self.admin_pw, self.vmx_path, self.snapshot, path).run()
             else:
-                test, details = BaseTest(self.admin, self.admin_pw, self.vmx_path).run()
+                test, details = BaseTest(self.admin, self.admin_pw, self.vmx_path, self.snapshot).run()
             self.results['run'] += 1
             if not test:
                 self.results['failed'] += 1
@@ -154,12 +155,12 @@ class TestRunner(object):
             manifest['managed_installs'].append(sut)
         plistlib.writePlist(manifest, manifest_path)
 
-    # Ensures VMWare Fusion is running, resets VM to Base snapshot, and starts VM
-    def startBaseVM(self):
+    # Ensures VMWare Fusion is running, resets VM to specified snapshot, and starts VM
+    def startVM(self):
         # Ensure VM is ON
         subprocess.call([VMRUN_CMD, "start", self.vmx_path])
-        # Revert to Base snapshot
-        subprocess.call([VMRUN_CMD, "revertToSnapshot", self.vmx_path, "Base"])
+        # Revert to snapshot
+        subprocess.call([VMRUN_CMD, "revertToSnapshot", self.vmx_path, self.snapshot])
         # Need to start again after reverting
         subprocess.call([VMRUN_CMD, "start", self.vmx_path])
 
@@ -218,10 +219,11 @@ class BaseTest(object):
 
 class AppInstallTest(BaseTest):
 
-    def __init__(self, admin, admin_pw, vmx_path, app_path):
+    def __init__(self, admin, admin_pw, vmx_path, snapshot, app_path):
         self.admin    = admin
         self.admin_pw = admin_pw 
         self.vmx_path = vmx_path
+        self.snapshot = snapshot
         self.app_path = app_path
 
     def appDoesOpen(self):
@@ -270,6 +272,9 @@ def main():
     parser.add_argument('--vmx', metavar='PATH', type=str, nargs=1, required=True,
         help='Path to vmx file for VM to use for testing.',
     )
+    parser.add_argument('--snapshot', metavar='TITLE', type=str, nargs=1, required=True,
+        help='Title of VM snapshot to use for testing.',
+    )
     parser.add_argument('--user', metavar='NAME', type=str, nargs=1, required=True,
         help='Shortname for admin account on VM.',
     )
@@ -286,7 +291,7 @@ def main():
     else:
         info.filter('all')
     SUTs = info.getInfos()
-    testrunner = TestRunner(args.repo[0], SUTs, args.vmx[0], args.user[0], args.password[0])
+    testrunner = TestRunner(args.repo[0], SUTs, args.vmx[0], args.snapshot[0], args.user[0], args.password[0])
     testrunner.runTests()
     testrunner.showDetails()
 
