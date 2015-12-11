@@ -119,7 +119,13 @@ class TestRunner(object):
             self.startBaseVM()
             self.modifyManifest(sut_name)
             time.sleep(2) # wait for VM to wake up.
-            test, details = IntegrationTest(self.admin, self.admin_pw, self.vmx_path).run()
+            # Right now only looks at first installs item
+            # Need to un-shittify this
+            if sut.pkginfo.get('installs')[0].get('type') == 'application':
+                path = sut.pkginfo['installs'][0]['path']
+                test, details = AppInstallTest(self.admin, self.admin_pw, self.vmx_path, path).run()
+            else:
+                test, details = BaseTest(self.admin, self.admin_pw, self.vmx_path).run()
             self.results['run'] += 1
             if not test:
                 self.results['failed'] += 1
@@ -162,7 +168,7 @@ class TestRunner(object):
         subprocess.call([VMRUN_CMD, "stop", self.vmx_path])
 
 # Defines testing methods for running against SUT
-class IntegrationTest(object):
+class BaseTest(object):
 
     def __init__(self, admin, admin_pw, vmx_path):
         self.admin    = admin
@@ -208,6 +214,36 @@ class IntegrationTest(object):
             return False, self.getError()
         if not self.installCheckSUT():
             return False, "Confirm installcheck is configured properly."
+        return True, None
+
+class AppInstallTest(BaseTest):
+
+    def __init__(self, admin, admin_pw, vmx_path, app_path):
+        self.admin    = admin
+        self.admin_pw = admin_pw 
+        self.vmx_path = vmx_path
+        self.app_path = app_path
+
+    def appDoesOpen(self):
+        exit_code = subprocess.call([VMRUN_CMD, "-T", "fusion", "-gu", self.admin, "-gp", self.admin_pw, "runProgramInGuest", self.vmx_path, "/bin/bash", "-c", "/usr/bin/open " + self.app_path])
+        return int(exit_code) == 0
+
+    # Runs test methods in proper order. If encounters exception in any of the test methods
+    # then returns test failure and the log message corresponding to the error that caused
+    # the exception.
+    def run(self):
+        try:
+            self.downloadSUT()
+        except Exception as e:
+            return False, self.getError()
+        try:
+            self.installSUT()
+        except Exception as e:
+            return False, self.getError()
+        if not self.installCheckSUT():
+            return False, "Confirm installcheck is configured properly."
+        if not self.appDoesOpen():
+            return False, "App failed to open."
         return True, None
 
 # Defines PkgInfo object
