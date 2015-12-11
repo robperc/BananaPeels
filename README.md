@@ -26,7 +26,7 @@ root            ALL=(ALL) ALL
 YOUR_ADMIN_USER ALL=(ALL) NOPASSWD: ALL
 ...
 ```
-- Take snapshot of VM titled "Base"
+- Take snapshots to use for testing. Ex: My munkitools-1.x.x snapshot is titled "Munki1", my munkitools-2.x.x snapshot is title "Munki2"
 
 ##Details:
 BananaPeels is a framework for testing the deployement of packages via Munki wrapped up in a CLI for ease-of-use. BananaPeels works by using a baseline OS X VM snapshot as a fixture to download and install specified packages to via Munki. Any failures or errors in the download or install process are logged and returned to the user at the conclusion of the sequence of tests.
