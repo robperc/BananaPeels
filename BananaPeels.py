@@ -122,11 +122,11 @@ class TestRunner(object):
             time.sleep(2) # wait for VM to wake up.
             # Right now only looks at first installs item
             # Need to un-shittify this
-            if sut.pkginfo.get('installs')[0].get('type') == 'application':
+            if sut.pkginfo.get('installs') is not None and sut.pkginfo.get('installs')[0].get('type') == 'application':
                 path = sut.pkginfo['installs'][0]['path']
                 test, details = AppInstallTest(self.admin, self.admin_pw, self.vmx_path, self.snapshot, path).run()
             else:
-                test, details = BaseTest(self.admin, self.admin_pw, self.vmx_path, self.snapshot).run()
+                test, details = BaseTest(self.admin, self.admin_pw, self.vmx_path).run()
             self.results['run'] += 1
             if not test:
                 self.results['failed'] += 1
