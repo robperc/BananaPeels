@@ -4,7 +4,7 @@ Note: This is very early on in dev. Pull requests are welcome.
 
 ##Requires:
 - VMWare Fusion
-- Pre-made and configured OS X VM
+- OS X VM and configured snapshots
 - Configured Munki repo to serve packages
 - test_munki_client manifest in manifests directory of repository
 
