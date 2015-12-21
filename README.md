@@ -58,7 +58,7 @@ optional arguments:
 ```
 ##Known Bugs
 - vmrun is currently not able to communicate properly with OSX > 10.10.2 VMs. See: https://communities.vmware.com/message/2510106#2510106
-- Occasionally Munki will fail with exit code 150 when run through vmrun. Haven't been able to pin down why, but exit code 150 appears to indicate that the repo is unavailable (which isn't the case upon manual inspection). When this occurs I have deleted and re-made the "Base" snapshot and things work again. Exit codes from munkicommon.py can be found below:
+- Occasionally Munki will fail with exit code 150 when run through vmrun. I believe this is due to a race condition where managedsoftwareupdate is being run on the VM before its network interfaces have been initialized after a snapshot revert. Exit codes from munkicommon.py can be found below:
 ```
 # Preflight exit codes.
 EXIT_STATUS_PREFLIGHT_FAILURE = 1  # Python crash yields 1.
