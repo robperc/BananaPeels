@@ -119,7 +119,7 @@ class TestRunner(object):
             sut_name = sut.name + '-' + str(sut.version)
             self.startVM()
             self.modifyManifest(sut_name)
-            time.sleep(2) # wait for VM to wake up.
+            time.sleep(3) # allow network interfaces to "wake up"
             # Right now only looks at first installs item
             # Need to un-shittify this
             if sut.pkginfo.get('installs') is not None and sut.pkginfo.get('installs')[0].get('type') == 'application':
