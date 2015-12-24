@@ -108,7 +108,7 @@ class TestRunner(object):
 
     def __init__(self, repo_path, suts, vmx_path, snapshot, admin, admin_pw):
         self.repo_path = repo_path
-        self.suts      = suts
+        self.suts      = list(suts)
         self.vmx_path  = vmx_path
         self.snapshot  = snapshot
         self.admin     = admin
