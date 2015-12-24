@@ -59,8 +59,11 @@ class PkgsInfoDict(object):
     ### Need to improve
     def filter(self, mode, filters=None):
         infos = list()
+	# if mode is 'all' return all pkginfos in munki repo
         if mode == 'all':
             infos = self.getAllInfos()
+	# if mode is 'only' name-vers filters are specified then return 
+	# pkginfos that conform to filter
         elif mode == 'only' and filters is not None:
             for fil in filters:
                 if len(fil.split('-')) == 1:
@@ -74,7 +77,9 @@ class PkgsInfoDict(object):
                     if self.repo_info[name].get(version) is None:
                         version = sorted(self.repo_info[name].keys(), key=LooseVersion)[-1]
                     infos.append(self.repo_info[name][version])
-        else:
+        # if no mode specified or only mode specified with no filters
+	# then only return latest
+	else:
             for name, versions in self.repo_info.iteritems():
                 latest = sorted(versions.keys(), key=LooseVersion)[-1]
                 infos.append(self.repo_info[name][latest])
