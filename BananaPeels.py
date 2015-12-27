@@ -127,8 +127,8 @@ class TestRunner(object):
             time.sleep(3) # allow network interfaces to "wake up"
             # Right now only looks at first installs item
             # Need to un-shittify this
-            if sut.pkginfo.get('installs') is not None and sut.pkginfo.get('installs')[0].get('type') == 'application':
-                path = sut.pkginfo['installs'][0]['path']
+            if sut.installs_app is not None:
+                path = sut.installs_app
                 test, details = AppInstallTest(self.admin, self.admin_pw, self.vmx_path, self.snapshot, path).run()
             else:
                 test, details = BaseTest(self.admin, self.admin_pw, self.vmx_path).run()
@@ -257,15 +257,27 @@ class AppInstallTest(BaseTest):
 class PkgInfo(object):
 
     def __init__(self, pkginfo):
-        self.path       = pkginfo
-        self.pkginfo    = self.getpkginfo(pkginfo)
-        self.name       = self.pkginfo.get("name")
-        self.version    = self.pkginfo.get("version")
-        self.update_for = self.pkginfo.get("update_for")
+        self.path         = pkginfo
+        self.pkginfo      = self.getpkginfo(pkginfo)
+        self.name         = self.pkginfo.get("name")
+        self.version      = self.pkginfo.get("version")
+        self.update_for   = self.pkginfo.get("update_for")
+        self.installs_app = self.getAppInstall()
 
     # Read specified pkginfo or plist into a python-parseable dictionary
     def getpkginfo(self, path):
         return plistlib.readPlist(path)
+
+    # If pkginfo has an application item in its install array return the path to the first one found
+    # Otherwise return None
+    def getAppInstall(self):
+        installs = self.pkginfos.get("installs")
+        if installs is not None:
+            for install in installs:
+                if install.get("type") == 'application':
+                    return install["path"]
+        return None
+
 
 def main():
     parser = argparse.ArgumentParser(
