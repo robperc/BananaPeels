@@ -271,7 +271,7 @@ class PkgInfo(object):
     # If pkginfo has an application item in its install array return the path to the first one found
     # Otherwise return None
     def getAppInstall(self):
-        installs = self.pkginfos.get("installs")
+        installs = self.pkginfo.get("installs")
         if installs is not None:
             for install in installs:
                 if install.get("type") == 'application':
