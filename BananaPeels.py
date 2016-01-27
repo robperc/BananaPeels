@@ -67,7 +67,9 @@ class PkgsInfoDict(object):
         infos = list()
 	# if mode is 'all' return all pkginfos in munki repo
         if mode == 'all':
-            infos = self.getAllInfos()
+            for name, versions in self.repo_info.iteritems():
+            for version in versions.keys():
+                infos.append(self.repo_info[name][version])
 	# if mode is 'only' name-vers filters are specified then return 
 	# pkginfos that conform to filter
         elif mode == 'only' and filters is not None:
@@ -90,13 +92,6 @@ class PkgsInfoDict(object):
             latest = sorted(versions.keys(), key=LooseVersion)[-1]
             infos.append(self.repo_info[name][latest])
     return infos
-
-    def getAllInfos(self):
-        infos = list()
-        for name, versions in self.repo_info.iteritems():
-            for version in versions.keys():
-                infos.append(self.repo_info[name][version])
-        return infos
 
     def __str__(self):
         ret_str = """"""
