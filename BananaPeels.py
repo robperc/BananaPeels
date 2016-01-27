@@ -34,7 +34,6 @@ class PkgsInfoDict(object):
     def __init__(self, repo_path):
         self.repo_path = repo_path
         self.repo_info = self.generate()
-        self.filtered = list()
 
     # Returns info for all pkginfos in repo_path.
     def generate(self):
