@@ -23,6 +23,13 @@ GREP_CMD        = "grep -c 'The following items will be installed or upgraded' "
 
 # Defines class for gathering PkgInfos
 class PkgsInfoDict(object):
+    """Parses the pkginfos in the munki repo at the specified path into an ordered dictionary (name: [versions]).
+
+    Attributes:
+        repo_path (str): Path to munki repo to parse.
+        repo_info (OrderedDict): Ordered dictionary containing pkginfos of input repo in {name: [versions]} form.
+
+    """
 
     def __init__(self, repo_path):
         self.repo_path = repo_path
@@ -77,12 +84,12 @@ class PkgsInfoDict(object):
                     if self.repo_info[name].get(version) is None:
                         version = sorted(self.repo_info[name].keys(), key=LooseVersion)[-1]
                     infos.append(self.repo_info[name][version])
-        # if no mode specified or only mode specified with no filters
+    # if no mode specified or only mode specified with no filters
 	# then only return latest
 	else:
-            for name, versions in self.repo_info.iteritems():
-                latest = sorted(versions.keys(), key=LooseVersion)[-1]
-                infos.append(self.repo_info[name][latest])
+        for name, versions in self.repo_info.iteritems():
+            latest = sorted(versions.keys(), key=LooseVersion)[-1]
+            infos.append(self.repo_info[name][latest])
         self.infos = infos
 
     def getAllInfos(self):
