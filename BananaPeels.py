@@ -89,7 +89,7 @@ class PkgsInfoDict(object):
         for name, versions in self.repo_info.iteritems():
             latest = sorted(versions.keys(), key=LooseVersion)[-1]
             infos.append(self.repo_info[name][latest])
-        self.infos = infos
+    return infos
 
     def getAllInfos(self):
         infos = list()
@@ -97,9 +97,6 @@ class PkgsInfoDict(object):
             for version in versions.keys():
                 infos.append(self.repo_info[name][version])
         return infos
-
-    def getInfos(self):
-        return self.infos
 
     def __str__(self):
         ret_str = """"""
