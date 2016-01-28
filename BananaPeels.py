@@ -35,8 +35,12 @@ class PkgsInfoDict(object):
 		self.repo_path = repo_path
 		self.repo_info = self.generate()
 
-	# Returns info for all pkginfos in repo_path.
 	def generate(self):
+		"""Parse pkginfos of munki repo into dictionary.
+
+		Returns:
+			Ordered dictionary containing pkginfos of input repo in {name: [versions]} form.
+		"""
 		repo_dict = dict()
 		info_dir  = os.path.join(self.repo_path, "pkgsinfo")
 		pkginfos  = []
