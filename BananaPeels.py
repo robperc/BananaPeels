@@ -67,6 +67,7 @@ class PkgsInfoDict(object):
 
 	def filter(self, mode, filters=None):
 		"""Filters repo_info dictionary for items matching specified filter
+		
 		Args:
 			filters (Optional[list(str,...)]): List of pkginfo names to filter out of pkginfo dict.
 											   Defaults to None.
