@@ -68,6 +68,13 @@ class PkgsInfoDict(object):
 	# Filters PkgInfoDict for infos matching specified filters.
 	### Need to improve
 	def filter(self, mode, filters=None):
+		"""Filters repo_info dictionary for items matching specified filter
+		Args:
+			filters (Optional[list(str,...)]): List of pkginfo names to filter out of pkginfo dict.
+											   Defaults to None.
+		Returns:
+			Ordered dictionary containing pkginfos of input repo in {name: [versions]} form.
+		"""
 		infos = list()
 		# if mode is 'all' return all pkginfos in munki repo
 		if mode == 'all':
