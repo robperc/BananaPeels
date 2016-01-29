@@ -312,9 +312,9 @@ def main():
 	args = parser.parse_args()
 	info = PkgsInfoDict(args.repo[0])
 	if args.only:
-		SUTs = info.filter('only', args.only)
+		SUTs = info.filter(args.only)
 	else:
-		SUTs = info.filter('all')
+		SUTs = info.filter()
 	testrunner = TestRunner(args.repo[0], SUTs, args.vmx[0], args.snapshot[0], args.user[0], args.password[0])
 	testrunner.runTests()
 	testrunner.showDetails()
