@@ -78,8 +78,8 @@ class PkgsInfoDict(object):
 		# if mode is 'all' return all pkginfos in munki repo
 		if filters is None:
 			for name, versions in self.repo_info.iteritems():
-			for version in versions.keys():
-				infos.append(self.repo_info[name][version])
+				for version in versions.keys():
+					infos.append(self.repo_info[name][version])
 		# if mode is 'only' name-vers filters are specified then return 
 		# pkginfos that conform to filter
 		else:
@@ -94,13 +94,13 @@ class PkgsInfoDict(object):
 				if self.repo_info.get(name) is not None:
 					if self.repo_info[name].get(version) is None:
 						version = sorted(self.repo_info[name].keys(), key=LooseVersion)[-1]
-					infos.append(self.repo_info[name][version])
+						infos.append(self.repo_info[name][version])
 		# if no mode specified or only mode specified with no filters
 		# then only return latest
-		else:
-			for name, versions in self.repo_info.iteritems():
-				latest = sorted(versions.keys(), key=LooseVersion)[-1]
-				infos.append(self.repo_info[name][latest])
+					else:
+						for name, versions in self.repo_info.iteritems():
+							latest = sorted(versions.keys(), key=LooseVersion)[-1]
+							infos.append(self.repo_info[name][latest])
 		return infos
 
 	def __str__(self):
