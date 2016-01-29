@@ -65,8 +65,6 @@ class PkgsInfoDict(object):
 				print
 		return OrderedDict(sorted(repo_dict.items(),key=lambda t: t[0]))
 
-	# Filters PkgInfoDict for infos matching specified filters.
-	### Need to improve
 	def filter(self, mode, filters=None):
 		"""Filters repo_info dictionary for items matching specified filter
 		Args:
