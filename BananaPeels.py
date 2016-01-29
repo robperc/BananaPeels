@@ -65,9 +65,9 @@ class PkgsInfoDict(object):
 				print
 		return OrderedDict(sorted(repo_dict.items(),key=lambda t: t[0]))
 
-	def filter(self, mode, filters=None):
+	def filter(self, filters=None):
 		"""Filters repo_info dictionary for items matching specified filter
-		
+
 		Args:
 			filters (Optional[list(str,...)]): List of pkginfo names to filter out of pkginfo dict.
 											   Defaults to None.
@@ -76,13 +76,13 @@ class PkgsInfoDict(object):
 		"""
 		infos = list()
 		# if mode is 'all' return all pkginfos in munki repo
-		if mode == 'all':
+		if filters is None:
 			for name, versions in self.repo_info.iteritems():
 			for version in versions.keys():
 				infos.append(self.repo_info[name][version])
 		# if mode is 'only' name-vers filters are specified then return 
 		# pkginfos that conform to filter
-		elif mode == 'only' and filters is not None:
+		else:
 			for fil in filters:
 				if len(fil.split('-')) == 1:
 					name = fil
