@@ -75,13 +75,12 @@ class PkgsInfoDict(object):
 			Ordered dictionary containing pkginfos of input repo in {name: [versions]} form.
 		"""
 		infos = list()
-		# if mode is 'all' return all pkginfos in munki repo
+		# if no filter specified then return all pkginfos
 		if filters is None:
 			for name, versions in self.repo_info.iteritems():
 				for version in versions.keys():
 					infos.append(self.repo_info[name][version])
-		# if mode is 'only' name-vers filters are specified then return 
-		# pkginfos that conform to filter
+		# otherwise filter out pkginfos whose name or name-vers match any of the filters
 		else:
 			for fil in filters:
 				if len(fil.split('-')) == 1:
@@ -95,8 +94,6 @@ class PkgsInfoDict(object):
 					if self.repo_info[name].get(version) is None:
 						version = sorted(self.repo_info[name].keys(), key=LooseVersion)[-1]
 						infos.append(self.repo_info[name][version])
-		# if no mode specified or only mode specified with no filters
-		# then only return latest
 					else:
 						for name, versions in self.repo_info.iteritems():
 							latest = sorted(versions.keys(), key=LooseVersion)[-1]
