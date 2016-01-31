@@ -83,11 +83,13 @@ class PkgsInfoDict(object):
 		# otherwise filter out pkginfos whose name or name-vers match any of the filters
 		else:
 			for fil in filters:
+				# check to see if version specified in filter
 				if len(fil.split('-')) == 1:
 					name = fil
 					version = None
 				elif len(fil.split('-')) == 2:
 					name, version = fil.split('-')
+				# if a filter has multiple '-' characters then it is not a valid filter and is skipped
 				else:
 					continue
 				# if the name matches a pkginfo in our repo...
