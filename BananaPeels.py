@@ -90,14 +90,16 @@ class PkgsInfoDict(object):
 					name, version = fil.split('-')
 				else:
 					continue
+				# if the name matches a pkginfo in our repo...
 				if self.repo_info.get(name) is not None:
-					if self.repo_info[name].get(version) is None:
-						version = sorted(self.repo_info[name].keys(), key=LooseVersion)[-1]
-						infos.append(self.repo_info[name][version])
+					# ... and there is no version specified or it is not found in our repo...
+					if version is None or self.repo_info[name].get(version) is None:
+						# ... add the latest version found to the filtered list.
+						latest = sorted(versions.keys(), key=LooseVersion)[-1]
+						infos.append(self.repo_info[name][latest])
+					# ... otherwise add the version specified by the filter.
 					else:
-						for name, versions in self.repo_info.iteritems():
-							latest = sorted(versions.keys(), key=LooseVersion)[-1]
-							infos.append(self.repo_info[name][latest])
+						infos.append(self.repo_info[name][version])
 		return infos
 
 	def __str__(self):
