@@ -21,7 +21,6 @@ CHECK_FILE      = "/tmp/installcheck_bananas.log"
 CHECK_CMD       = DL_CMD + " > " + CHECK_FILE
 GREP_CMD        = "grep -c 'The following items will be installed or upgraded' " + CHECK_FILE
 
-# Defines class for gathering PkgInfos
 class PkgsInfoDict(object):
 	"""Parses the pkginfos in the munki repo at the specified path into an ordered dictionary (name: [versions]).
 
@@ -112,8 +111,19 @@ class PkgsInfoDict(object):
 				ret_str += ' - ' + c + '\n'
 		return ret_str
 
-# Handles the running of the tests for the specified pkginfos it is provided
 class TestRunner(object):
+	"""Test the deployement of specified suts to specified snapshot of VM.
+
+	Attributes:
+		repo_path (str): Path to munki repo to parse.
+		suts (list(str, ...)): List of pkginfos to test.
+		vmx_path (str): Path to vmx file for VM to deploy to.
+		snapshot (str): Name of snapshot to set VM to.
+		admin (str): Username of admin account to connect to VM as.
+		admin_pw (str): Password for admin account.
+		results (dict()): Dictionary containing information about results of tests.
+
+	"""
 
 	def __init__(self, repo_path, suts, vmx_path, snapshot, admin, admin_pw):
 		self.repo_path = repo_path
