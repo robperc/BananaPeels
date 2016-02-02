@@ -134,8 +134,6 @@ class TestRunner(object):
 		self.admin_pw  = admin_pw
 		self.results   = dict(runtime=0.0, run=0, failed=0, details=dict())
 
-	# Run tests for each SUT. Appends True / False passed key
-	# as well as run details to dict entry for specified SUT.
 	def runTests(self):
 		"""Runs test for each SUT and appends dictionary entry containing details for each to results.
 
