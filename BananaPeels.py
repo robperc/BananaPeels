@@ -162,6 +162,9 @@ class TestRunner(object):
 
 	# Show run details for SUTs that fail tests
 	def showDetails(self):
+		"""Print details of tests run to stdout.
+
+		"""
 		print "Finished in %.4f seconds" % (self.results['runtime'])
 		print "%i tests, %i failures" % (self.results['run'], self.results['failed'])
 		if self.results['details']:
