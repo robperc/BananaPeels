@@ -94,7 +94,8 @@ class PkgsInfoDict(object):
 				# if the name matches a pkginfo in our repo...
 				if self.repo_info.get(name) is not None:
 					# ... and there is no version specified or it is not found in our repo...
-					if version is None or self.repo_info[name].get(version) is None:
+					versions = self.repo_info[name]
+					if version is None or versions.get(version) is None:
 						# ... add the latest version found to the filtered list.
 						latest = sorted(versions.keys(), key=LooseVersion)[-1]
 						infos.append(self.repo_info[name][latest])
