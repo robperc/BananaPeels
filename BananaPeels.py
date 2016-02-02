@@ -136,7 +136,7 @@ class TestRunner(object):
 		self.results   = dict(runtime=0.0, run=0, failed=0, details=dict())
 
 	def runTests(self):
-		"""Runs test for each SUT and appends dictionary entry containing details for each to results.
+		"""Run test for each SUT and appends dictionary entry containing details for each to results.
 
 		"""
 		start = time.time()
