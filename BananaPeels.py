@@ -174,6 +174,14 @@ class TestRunner(object):
 
 	# Returns True if all SUT's passed, False otherwise
 	def didPass(self):
+		"""
+		Boolean check to see if any tests failed.
+
+		Returns:
+			True if no tests failed.
+			False otherwise.
+
+		"""
 		return self.results['failed'] == 0
 
 	def modifyManifest(self, sut=None):
