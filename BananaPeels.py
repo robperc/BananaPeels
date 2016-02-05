@@ -173,10 +173,10 @@ class TestRunner(object):
 
 	def didPass(self):
 		"""
-		Boolean check to see if any tests failed.
+		Boolean check to verify all tests passed.
 
 		Returns:
-			True if no tests failed.
+			True if all tests passed.
 			False otherwise.
 
 		"""
