@@ -160,7 +160,6 @@ class TestRunner(object):
 		self.modifyManifest()
 		self.results['runtime'] = (time.time() - start)
 
-	# Show run details for SUTs that fail tests
 	def showDetails(self):
 		"""Print details of tests run to stdout.
 
@@ -172,7 +171,6 @@ class TestRunner(object):
 				print "%s failed!" % (sut)
 				print details
 
-	# Returns True if all SUT's passed, False otherwise
 	def didPass(self):
 		"""
 		Boolean check to see if any tests failed.
