@@ -183,6 +183,13 @@ class TestRunner(object):
 		return self.results['failed'] == 0
 
 	def modifyManifest(self, sut=None):
+		"""Modifies test manifest by clearing managed installs then adding sut as managed install.
+		   If sut is None then manifest will have no managed_installs.
+
+		Args:
+			sut (Optional[str]): Name (or name-vers string) of pkg to add to managed installs.
+								 Defaults to None.
+		"""
 		manifest_path                = os.path.join(self.repo_path, "manifests", TEST_MANIFEST)
 		manifest                     = plistlib.readPlist(manifest_path)
 		manifest['managed_installs'] = []
