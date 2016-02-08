@@ -210,6 +210,9 @@ class TestRunner(object):
 		subprocess.call([VMRUN_CMD, "start", self.vmx_path])
 
 	def stopVM(self):
+		"""Stop VM
+
+		"""
 		subprocess.call([VMRUN_CMD, "stop", self.vmx_path])
 
 # Defines testing methods for running against SUT
