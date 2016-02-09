@@ -232,6 +232,12 @@ class BaseTest(object):
 
 	# Prompts Munki to check for updates on guest VM. Throws exception if exit code is not 0
 	def downloadSUT(self):
+		""" Prompts Munki to check for updates on guest VM.
+
+		Raises:
+			CalledProcessError: if exit code is not 0.
+
+		"""
 		subprocess.check_call([VMRUN_CMD, "-T", "fusion", "-gu", self.admin, "-gp", self.admin_pw, "runProgramInGuest", self.vmx_path, "/bin/bash", "-c", DL_CMD])
 	
 	# Prompts Munki to install updates on guest VM. Throws exception if exit code is not 0.
