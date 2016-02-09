@@ -230,7 +230,6 @@ class BaseTest(object):
 		self.admin_pw = admin_pw 
 		self.vmx_path = vmx_path
 
-	# Prompts Munki to check for updates on guest VM. Throws exception if exit code is not 0
 	def downloadSUT(self):
 		""" Prompts Munki to check for updates on guest VM.
 
