@@ -215,7 +215,6 @@ class TestRunner(object):
 		"""
 		subprocess.call([VMRUN_CMD, "stop", self.vmx_path])
 
-# Defines testing methods for running against SUT
 class BaseTest(object):
 	"""Base test to confirm generic pkgs installcheck properly.
 
