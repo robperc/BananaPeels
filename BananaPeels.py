@@ -217,6 +217,14 @@ class TestRunner(object):
 
 # Defines testing methods for running against SUT
 class BaseTest(object):
+	"""Base test to confirm generic pkgs installcheck properly.
+
+	Attributes:
+		admin (str): Username of admin.
+		admin_pw (str): Password for admin.
+		vmx_path (str): Path to vmx file for VM.
+
+	"""
 
 	def __init__(self, admin, admin_pw, vmx_path):
 		self.admin    = admin
