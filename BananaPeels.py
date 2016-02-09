@@ -118,7 +118,7 @@ class TestRunner(object):
 	Attributes:
 		repo_path (str): Path to munki repo to parse.
 		suts (list(str, ...)): List of pkginfos to test.
-		vmx_path (str): Path to vmx file for VM to deploy to.
+		vmx_path (str): Path to vmx file for VM.
 		snapshot (str): Name of snapshot to set VM to.
 		admin (str): Username of admin account to connect to VM as.
 		admin_pw (str): Password for admin account.
