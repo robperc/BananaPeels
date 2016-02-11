@@ -231,7 +231,7 @@ class BaseTest(object):
 		self.vmx_path = vmx_path
 
 	def downloadSUT(self):
-		""" Prompts Munki to check for updates on guest VM.
+		""" Prompt Munki to check for updates on guest VM.
 
 		Raises:
 			CalledProcessError: if exit code is not 0.
@@ -241,6 +241,12 @@ class BaseTest(object):
 	
 	# Prompts Munki to install updates on guest VM. Throws exception if exit code is not 0.
 	def installSUT(self):
+		""" Prompt Munki to install updates on guest VM.
+
+		Raises:
+			CalledProcessError: if exit code is not 0.
+
+		"""
 		subprocess.check_call([VMRUN_CMD, "-T", "fusion", "-gu", self.admin, "-gp", self.admin_pw, "runProgramInGuest", self.vmx_path, "/bin/bash", "-c", INSTALL_CMD])
 
 	# Checks to ensure SUT and it's dependencies all installcheck properly.
