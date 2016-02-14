@@ -249,8 +249,6 @@ class BaseTest(object):
 		"""
 		subprocess.check_call([VMRUN_CMD, "-T", "fusion", "-gu", self.admin, "-gp", self.admin_pw, "runProgramInGuest", self.vmx_path, "/bin/bash", "-c", INSTALL_CMD])
 
-	# Checks to ensure SUT and it's dependencies all installcheck properly.
-	# Returns True if installchecks find SUT and dependencies, False otherwise.
 	def installCheckSUT(self):
 		"""
 		Boolean check to ensure SUT and it's dependencies all installcheck properly.
