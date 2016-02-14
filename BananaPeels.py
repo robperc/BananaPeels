@@ -266,6 +266,13 @@ class BaseTest(object):
 
 	# Copies Munki error log from guest VM to host and returns most recently appended line.
 	def getError(self):
+		"""
+		Copy Munki error log from guest VM to host and return most recently appended line.
+
+		Returns:
+			Most recently appended line of Munki error log file.
+
+		"""
 		subprocess.call([VMRUN_CMD, "-T", "fusion", "-gu", self.admin, "-gp", self.admin_pw, "copyFileFromGuestToHost", self.vmx_path, GUEST_ERROR_LOG, "/tmp/errors_peels.log"])
 		p = subprocess.Popen(["tail", "-n1", "/tmp/errors_peels.log"], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 		out, err = p.communicate()
