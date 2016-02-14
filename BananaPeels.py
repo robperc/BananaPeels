@@ -282,6 +282,14 @@ class BaseTest(object):
 	# then returns test failure and the log message corresponding to the error that caused
 	# the exception.
 	def run(self):
+		"""
+		Run methods to perform test to verify SUT downloads, installs, and installchecks properly.
+
+		Returns:
+			(True, None) if no exceptions are encountered during test.
+			(False, error_details) otherwise.
+
+		"""
 		try:
 			self.downloadSUT()
 		except Exception as e:
