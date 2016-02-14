@@ -252,6 +252,14 @@ class BaseTest(object):
 	# Checks to ensure SUT and it's dependencies all installcheck properly.
 	# Returns True if installchecks find SUT and dependencies, False otherwise.
 	def installCheckSUT(self):
+		"""
+		Boolean check to ensure SUT and it's dependencies all installcheck properly.
+
+		Returns:
+			True if SUT and dependencies installcheck properly.
+			False otherwise.
+
+		"""
 		subprocess.call([VMRUN_CMD, "-T", "fusion", "-gu", self.admin, "-gp", self.admin_pw, "runProgramInGuest", self.vmx_path, "/bin/bash", "-c", CHECK_CMD])
 		subprocess.call([VMRUN_CMD, "-T", "fusion", "-gu", self.admin, "-gp", self.admin_pw, "copyFileFromGuestToHost", self.vmx_path, CHECK_FILE, "/tmp/installcheck_peels.log"])
 		p = subprocess.Popen(["grep", "-c", "The following items will be installed or upgraded", "/tmp/installcheck_peels.log"], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
