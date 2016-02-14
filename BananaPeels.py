@@ -264,7 +264,6 @@ class BaseTest(object):
 		out, err = p.communicate()
 		return int(out) == 0
 
-	# Copies Munki error log from guest VM to host and returns most recently appended line.
 	def getError(self):
 		"""
 		Copy Munki error log from guest VM to host and return most recently appended line.
