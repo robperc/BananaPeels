@@ -300,6 +300,15 @@ class BaseTest(object):
 		return True, None
 
 class AppInstallTest(BaseTest):
+	"""Test for pkgs that have application type installs entries.
+
+	Attributes:
+		admin (str): Username of admin.
+		admin_pw (str): Password for admin.
+		vmx_path (str): Path of vmx file for VM.
+		app_path (str): Path of application to test.
+
+	"""
 
 	def __init__(self, admin, admin_pw, vmx_path, snapshot, app_path):
 		self.admin    = admin
