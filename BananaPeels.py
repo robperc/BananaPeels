@@ -318,6 +318,14 @@ class AppInstallTest(BaseTest):
 		self.app_path = app_path
 
 	def appDoesOpen(self):
+		"""
+		Boolean check to ensure application opens.
+
+		Returns:
+			True if application opens without error.
+			False otherwise.
+
+		"""
 		exit_code = subprocess.call([VMRUN_CMD, "-T", "fusion", "-gu", self.admin, "-gp", self.admin_pw, "runProgramInGuest", self.vmx_path, "/bin/bash", "-c", "/usr/bin/open " + self.app_path.replace(" ", "\ ")])
 		return int(exit_code) == 0
 
