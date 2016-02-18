@@ -329,9 +329,6 @@ class AppInstallTest(BaseTest):
 		exit_code = subprocess.call([VMRUN_CMD, "-T", "fusion", "-gu", self.admin, "-gp", self.admin_pw, "runProgramInGuest", self.vmx_path, "/bin/bash", "-c", "/usr/bin/open " + self.app_path.replace(" ", "\ ")])
 		return int(exit_code) == 0
 
-	# Runs test methods in proper order. If encounters exception in any of the test methods
-	# then returns test failure and the log message corresponding to the error that caused
-	# the exception.
 	def run(self):
 		"""
 		Run methods to perform test to verify SUT downloads, installs, installchecks and application opens properly.
