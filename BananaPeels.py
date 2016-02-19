@@ -355,6 +355,7 @@ class AppInstallTest(BaseTest):
 # Defines PkgInfo object
 class PkgInfo(object):
 
+
 	def __init__(self, pkginfo):
 		self.path         = pkginfo
 		self.pkginfo      = self.getpkginfo(pkginfo)
@@ -365,6 +366,13 @@ class PkgInfo(object):
 
 	# Read specified pkginfo or plist into a python-parseable dictionary
 	def getpkginfo(self, path):
+		"""
+		Read pkginfo or plist at path into a python-parseable dictionary.
+
+		Returns:
+			Dictionary containing elements of pkginfo or plist.
+
+		"""
 		return plistlib.readPlist(path)
 
 	# If pkginfo has an application item in its install array return the path to the first one found
