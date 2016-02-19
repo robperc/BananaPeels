@@ -364,7 +364,6 @@ class PkgInfo(object):
 		self.update_for   = self.pkginfo.get("update_for")
 		self.installs_app = self.getAppInstall()
 
-	# Read specified pkginfo or plist into a python-parseable dictionary
 	def getpkginfo(self, path):
 		"""
 		Read pkginfo or plist at path into a python-parseable dictionary.
