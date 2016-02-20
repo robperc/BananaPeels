@@ -354,6 +354,17 @@ class AppInstallTest(BaseTest):
 
 # Defines PkgInfo object
 class PkgInfo(object):
+	"""PkgInfo object with elements parsed and accessible as attributes.
+
+	Attributes:
+		path (str): Path to pkginfo.
+		pkginfo (str): Dictionary containing parsed elements of pkginfo.
+		name (str): Name of SUT.
+		version (str): Version of SUT
+		update_for (list[str]): List of names (str) that SUT is an update for.
+		installs_app (str): Path of first application type install found (None if none found).
+
+	"""
 
 
 	def __init__(self, pkginfo):
