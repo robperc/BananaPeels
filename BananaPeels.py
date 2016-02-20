@@ -377,6 +377,14 @@ class PkgInfo(object):
 	# If pkginfo has an application item in its install array return the path to the first one found
 	# Otherwise return None
 	def getAppInstall(self):
+		"""
+		Get application path from installs array of pkginfo for SUT.
+
+		Returns:
+			Path of first application type install found.
+			None if no application type install is found.
+
+		"""
 		installs = self.pkginfo.get("installs")
 		if installs is not None:
 			for install in installs:
