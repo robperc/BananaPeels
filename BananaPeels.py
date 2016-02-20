@@ -352,7 +352,7 @@ class AppInstallTest(BaseTest):
 			return False, "App failed to open."
 		return True, None
 
-# Defines PkgInfo object
+
 class PkgInfo(object):
 	"""PkgInfo object with elements parsed and accessible as attributes.
 
