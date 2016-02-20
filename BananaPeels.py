@@ -374,8 +374,6 @@ class PkgInfo(object):
 		"""
 		return plistlib.readPlist(path)
 
-	# If pkginfo has an application item in its install array return the path to the first one found
-	# Otherwise return None
 	def getAppInstall(self):
 		"""
 		Get application path from installs array of pkginfo for SUT.
