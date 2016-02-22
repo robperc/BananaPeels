@@ -366,7 +366,6 @@ class PkgInfo(object):
 
 	"""
 
-
 	def __init__(self, pkginfo):
 		self.path         = pkginfo
 		self.pkginfo      = self.getpkginfo(pkginfo)
