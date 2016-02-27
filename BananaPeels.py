@@ -22,7 +22,8 @@ CHECK_CMD       = DL_CMD + " > " + CHECK_FILE
 GREP_CMD        = "grep -c 'The following items will be installed or upgraded' " + CHECK_FILE
 
 class PkgsInfoDict(object):
-	"""Parses the pkginfos in the munki repo at the specified path into an ordered dictionary (name: [versions]).
+	"""
+	Parses the pkginfos in the munki repo at the specified path into an ordered dictionary (name: [versions]).
 
 	Attributes:
 		repo_path (str): Path to munki repo to parse.
@@ -35,7 +36,8 @@ class PkgsInfoDict(object):
 		self.repo_info = self.generate()
 
 	def generate(self):
-		"""Parse pkginfos of munki repo into dictionary.
+		"""
+		Parse pkginfos of munki repo into dictionary.
 
 		Returns:
 			Ordered dictionary containing pkginfos of input repo in {name: [versions]} form.
@@ -65,7 +67,8 @@ class PkgsInfoDict(object):
 		return OrderedDict(sorted(repo_dict.items(),key=lambda t: t[0]))
 
 	def filter(self, filters=None):
-		"""Filters repo_info dictionary for items matching specified filter
+		"""
+		Filters repo_info dictionary for items matching specified filter
 
 		Args:
 			filters (Optional[list(str,...)]): List of pkginfo names to filter out of pkginfo dict.
@@ -113,7 +116,8 @@ class PkgsInfoDict(object):
 		return ret_str
 
 class TestRunner(object):
-	"""Test the deployement of specified suts to specified snapshot of VM.
+	"""
+	Test the deployement of specified suts to specified snapshot of VM.
 
 	Attributes:
 		repo_path (str): Path to munki repo to parse.
@@ -136,7 +140,8 @@ class TestRunner(object):
 		self.results   = dict(runtime=0.0, run=0, failed=0, details=dict())
 
 	def runTests(self):
-		"""Run test for each SUT and appends dictionary entry containing details for each to results.
+		"""
+		Run test for each SUT and appends dictionary entry containing details for each to results.
 
 		"""
 		start = time.time()
@@ -199,7 +204,8 @@ class TestRunner(object):
 
 	# Ensures VMWare Fusion is running, resets VM to specified snapshot, and starts VM
 	def startVM(self):
-		"""Ensure VMWare is running, reset VM to snapshot, and start VM.
+		"""
+		Ensure VMWare is running, reset VM to snapshot, and start VM.
 
 		"""
 		# Ensure VM is ON
@@ -216,7 +222,8 @@ class TestRunner(object):
 		subprocess.call([VMRUN_CMD, "stop", self.vmx_path])
 
 class BaseTest(object):
-	"""Base test to confirm generic pkgs installcheck properly.
+	"""
+	Base test to confirm generic pkgs installcheck properly.
 
 	Attributes:
 		admin (str): Username of admin.
@@ -231,7 +238,8 @@ class BaseTest(object):
 		self.vmx_path = vmx_path
 
 	def downloadSUT(self):
-		""" Prompt Munki to check for updates on guest VM.
+		"""
+		Prompt Munki to check for updates on guest VM.
 
 		Raises:
 			CalledProcessError: if exit code is not 0.
@@ -241,7 +249,8 @@ class BaseTest(object):
 	
 	# Prompts Munki to install updates on guest VM. Throws exception if exit code is not 0.
 	def installSUT(self):
-		""" Prompt Munki to install updates on guest VM.
+		"""
+		Prompt Munki to install updates on guest VM.
 
 		Raises:
 			CalledProcessError: if exit code is not 0.
@@ -300,7 +309,8 @@ class BaseTest(object):
 		return True, None
 
 class AppInstallTest(BaseTest):
-	"""Test for pkgs that have application type installs entries.
+	"""
+	Test for pkgs that have application type installs entries.
 
 	Attributes:
 		admin (str): Username of admin.
@@ -354,7 +364,8 @@ class AppInstallTest(BaseTest):
 
 
 class PkgInfo(object):
-	"""PkgInfo object with elements parsed and accessible as attributes.
+	"""
+	PkgInfo object with elements parsed and accessible as attributes.
 
 	Attributes:
 		path (str): Path to pkginfo.
