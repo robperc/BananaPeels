@@ -168,7 +168,8 @@ class TestRunner(object):
 		self.results['runtime'] = (time.time() - start)
 
 	def showDetails(self):
-		"""Print details of tests run to stdout.
+		"""
+		Print details of tests run to stdout.
 
 		"""
 		print "Finished in %.4f seconds" % (self.results['runtime'])
@@ -190,7 +191,8 @@ class TestRunner(object):
 		return self.results['failed'] == 0
 
 	def modifyManifest(self, sut=None):
-		"""Modify test manifest by clearing managed installs then adding sut as managed install.
+		"""
+		Modify test manifest by clearing managed installs then adding sut as managed install.
 		   If sut is None then manifest will have no managed_installs.
 
 		Args:
