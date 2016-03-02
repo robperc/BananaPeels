@@ -41,6 +41,7 @@ class PkgsInfoDict(object):
 
 		Returns:
 			Ordered dictionary containing pkginfos of input repo in {name: [versions]} form.
+
 		"""
 		repo_dict = dict()
 		info_dir  = os.path.join(self.repo_path, "pkgsinfo")
@@ -70,11 +71,12 @@ class PkgsInfoDict(object):
 		"""
 		Filters repo_info dictionary for items matching specified filter
 
-		Args:
-			filters (Optional[list(str,...)]): List of pkginfo names to filter out of pkginfo dict.
+		Keyword Args:
+			filters (list(str, ..., str)): List of pkginfo names to filter out of pkginfo dict.
 											   Defaults to None.
 		Returns:
 			Ordered dictionary containing pkginfos of input repo in {name: [versions]} form.
+
 		"""
 		infos = list()
 		# if no filter specified then return all pkginfos
