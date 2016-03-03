@@ -73,7 +73,7 @@ class PkgsInfoDict(object):
 
 		Keyword Args:
 			filters (list(str, ..., str)): List of pkginfo names to filter out of pkginfo dict.
-											   Defaults to None.
+										   Defaults to None.
 		Returns:
 			Ordered dictionary containing pkginfos of input repo in {name: [versions]} form.
 
@@ -195,9 +195,9 @@ class TestRunner(object):
 		Modify test manifest by clearing managed installs then adding sut as managed install.
 		   If sut is None then manifest will have no managed_installs.
 
-		Args:
-			sut (Optional[str]): Name (or name-vers string) of pkg to add to managed installs.
-								 Defaults to None.
+		Keyword Args:
+			sut (str): Name (or name-vers string) of pkg to add to managed installs.
+					   Defaults to None.
 		"""
 		manifest_path                = os.path.join(self.repo_path, "manifests", TEST_MANIFEST)
 		manifest                     = plistlib.readPlist(manifest_path)
